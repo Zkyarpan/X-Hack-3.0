@@ -1,43 +1,21 @@
-
-import React, { useEffect } from "react";
+import React from "react";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-import axios from "axios";
+import PlantRequests from "../components/ViewPlants";
 
-const Explore = () => {
-  const baseUrl = import.meta.env.VITE_BASE_URL;
-  const token = localStorage.getItem("token");
-  useEffect(() => {
-    const fetchPlants = async () => {
-      try {
-        const response = await axios.get(
-          `${baseUrl}/api/plantsrequest/farmer/seller-requests`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "ngrok-skip-browser-warning": "69420",
-            },
-          }
-        );
-
-        setVegetables(response.data.Result.plants);
-      } catch (error) {
-        console.error("Error fetching plants:", error);
-      }
-    };
-
-    fetchPlants();
-  }, [baseUrl, token]);
+const SellerNeeds = () => {
   return (
     <div className="flex gap-1 bg-gray-50">
       <Sidebar />
       <div className="flex flex-col">
         <Topbar />
 
-        <div></div>
+        <div>
+          <PlantRequests />
+        </div>
       </div>
     </div>
   );
 };
 
-export default Explore;
+export default SellerNeeds;
