@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
+import { chromium } from "playwright";
 import userRouter from "./routes/sellerRoutes.js";
 import farmerRouter from "./routes/farmerRouter.js";
 import plantRouter from "./routes/plantRouter.js";
@@ -28,7 +28,6 @@ app.options("*", cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.get("/", (req, res) => {
   res.json({ message: "Let's hack the hackathon..." });
 });
@@ -39,6 +38,53 @@ app.use("/api/plants", plantRouter);
 app.use("/api/plantsrequest", plantRequestRouter);
 app.use("/api/blogs", blogRouter);
 app.use("/api/dashboard", dashboardRouter);
+
+async function fetchVegetablePrices() {
+  const browser = await chromium.launch({
+    executablePath:
+      "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe", // Path to Chrome
+    headless: true, // Run in headless mode
+  });
+
+  const page = await browser.newPage();
+  await page.goto("https://nepalipatro.com.np/vegetables");
+
+  // Extract table data
+  const vegetables = await page.evaluate(() => {
+    const rows = Array.from(document.querySelectorAll("table tbody tr"));
+    return rows.map((row) => {
+      const columns = row.querySelectorAll("td");
+      return {
+        name: columns[0]?.innerText.trim(),
+        avgPrice: columns[1]?.innerText.trim(),
+        minPrice: columns[2]?.innerText.trim(),
+        maxPrice: columns[3]?.innerText.trim(),
+      };
+    });
+  });
+
+  await browser.close();
+  return vegetables;
+}
+
+// API endpoint to fetch vegetable prices
+app.get("/api/vegetable-prices", async (req, res) => {
+  try {
+    const vegetables = await fetchVegetablePrices();
+
+    return res.status(200).json({
+      StatusCode: 200,
+      IsSuccess: true,
+      ErrorMessage: [{ message: "Vegetable Prices Succcessfully Implmented" }],
+      Result: { data: vegetables },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      IsSuccess: false,
+      message: "Failed to fetch vegetable prices",
+    });
+  }
+});
 
 app.use((req, res, next) => {
   const error = new Error("Not Found");

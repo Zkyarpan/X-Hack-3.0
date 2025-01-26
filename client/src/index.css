@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import 'stream-chat-react/dist/css/index.css';
 
 @keyframes blink {
   from,

@@ -22,7 +22,6 @@ plantRequestRouter.post(
 plantRequestRouter.get(
   "/seller-requests",
   authenticateToken,
-  isSeller,
   sellerRequest
 );
 

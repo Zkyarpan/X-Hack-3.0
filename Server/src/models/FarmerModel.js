@@ -33,11 +33,6 @@ const farmerSchema = new mongoose.Schema(
       type: String,
       required: [true, "Farm name is required"],
     },
-    agriculturalLicenseNumber: {
-      type: String,
-      required: [true, "Agricultural license number is required"],
-      unique: [true, "This license number is already registered"],
-    },
 
     licenseImage: {
       type: String,

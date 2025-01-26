@@ -75,7 +75,7 @@ export const sellerRequest = async (req, res) => {
       });
     }
 
-    const requests = await PlantRequest.find({ sellerId }).populate(
+    const requests = await PlantRequest.find({ }).populate(
       "plantId",
       "name quantity price location"
     );
