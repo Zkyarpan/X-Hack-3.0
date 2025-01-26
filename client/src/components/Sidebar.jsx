@@ -213,7 +213,7 @@ const Sidebar = () => {
                   <line x1="12" x2="12" y1="8" y2="16" />
                   <line x1="8" x2="16" y1="12" y2="12" />
                 </svg>
-                Add Needs
+                Request Stock
               </Link>
               <Link
                 className={`flex items-center text-xl hover:text-[#2D775C] hover:bg-[#2D775C]/5 gap-4 px-4 py-2 rounded-lg transition-colors ${isActive(
